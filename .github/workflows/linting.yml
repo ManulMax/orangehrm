@@ -2,6 +2,9 @@ name: Lint
 
 on: [ push, pull_request ]
 
+env:
+  API_VERSION: '2.2.0'
+
 jobs:
   lint:
     runs-on: ubuntu-22.04
@@ -53,6 +56,15 @@ jobs:
       - name: Generate OpenAPI documentation
         run: php devTools/core/console.php generate-open-api-doc
 
+      - name: Check for warnings
+        run: |
+          if grep -q "Warning" /tmp/generate-open-api-doc.log; then
+            echo "OpenAPI documentation generation produced warnings!"
+            exit 1
+          else
+            echo "OpenAPI documentation generated successfully!"
+          fi
+
       - name: Extract version number
         uses: actions/github-script@v4
         with:
@@ -63,8 +75,8 @@ jobs:
 
       - name: Check API version
         run: |
-          if [ ${{ steps.extract_version.outputs.result }} != "2.2.0" ]; then
-            echo "API version is not 2.2.0"
+          if [ ${{ steps.extract_version.outputs.result }} != "$API_VERSION" ]; then
+            echo "API version is not $API_VERSION"
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
