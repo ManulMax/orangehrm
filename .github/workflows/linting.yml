@@ -55,6 +55,20 @@ jobs:
 
       - name: Generate OpenAPI documentation
         run: php devTools/core/console.php generate-open-api-doc
+        id: generate-doc
+
+      - name: Check for errors
+        if: steps.generate-doc.outcome == 'failure'
+        run: |
+          echo "Error: ${{ steps.generate-doc.exit-code }} ${{ steps.generate-doc.output }}"
+          if echo "${{ steps.generate-doc.output }}" | grep -q "PHP Stack trace"; then
+            echo "PHP Stack trace found. Exiting with error."
+            exit 1
+          fi
+          if echo "${{ steps.generate-doc.output }}" | grep -q "Warning:"; then
+            echo "Warnings found. Exiting with error."
+            exit 1
+          fi
 
       - name: Check for errors
         run: |
