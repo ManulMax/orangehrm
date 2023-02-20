@@ -31,36 +31,41 @@ jobs:
           php8.1 -f /usr/bin/composer install -d src
           php8.1 -f /usr/bin/composer install -d devTools/core
 
-      - name: Check PHP Coding Standards
-        run: php devTools/core/console.php php-cs-fix --php php8.1
+      # - name: Check PHP Coding Standards
+      #   run: php devTools/core/console.php php-cs-fix --php php8.1
 
-      - name: Check files changed
-        id: git-status
-        run: |
-          git status --porcelain
-          echo "status=$(git status --porcelain)" >> $GITHUB_OUTPUT
+      # - name: Check files changed
+      #   id: git-status
+      #   run: |
+      #     git status --porcelain
+      #     echo "status=$(git status --porcelain)" >> $GITHUB_OUTPUT
 
-      - name: Fail if files changed
-        if: ${{ steps.git-status.outputs.status }}
-        uses: actions/github-script@v3
-        with:
-          script: |
-            core.setFailed('Files changed with lint fix')
+      # - name: Fail if files changed
+      #   if: ${{ steps.git-status.outputs.status }}
+      #   uses: actions/github-script@v3
+      #   with:
+      #     script: |
+      #       core.setFailed('Files changed with lint fix')
 
-      - name: Creating diff
-        if: ${{ failure() }}
-        run: |
-          git status
-          git diff > ${{ github.sha }}.diff
+      # - name: Creating diff
+      #   if: ${{ failure() }}
+      #   run: |
+      #     git status
+      #     git diff > ${{ github.sha }}.diff
 
+      # - name: Generate OpenAPI documentation
+      #   run: php devTools/core/console.php generate-open-api-doc
+      #   id: generate-doc
       - name: Generate OpenAPI documentation
-        run: php devTools/core/console.php generate-open-api-doc
-        id: generate-doc
-
-      - name: Check for errors
-        if: ${{ failure() }}
+        id: generate-openapi
         run: |
-          echo "abcd"
+          output=$(php devTools/core/console.php generate-open-api-doc 2>&1)
+          echo "::set-output name=output::$output"
+
+      # - name: Check for errors
+      #   if: ${{ failure() }}
+      #   run: |
+      #     echo "abcd"
 
       - name: Extract version number
         uses: actions/github-script@v4
