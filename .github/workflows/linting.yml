@@ -53,6 +53,24 @@ jobs:
       - name: Generate OpenAPI documentation
         run: php devTools/core/console.php generate-open-api-doc
 
+    - name: Fetch data from API
+      run: |
+        composer require guzzlehttp/guzzle
+        php -r "
+        require 'vendor/autoload.php';
+        use GuzzleHttp\Client;
+        \$client = new Client();
+        \$response = \$client->request('GET', 'https://example.com/api/data');
+        echo \$response->getBody()->getContents();
+        "
+        
+      - name: Check for warnings
+        run: |
+          if grep -q "PHP Warning" output.txt; then
+            echo "Generate OpenAPI documentation failed with warnings."
+            exit 1
+          fi
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         if: ${{ failure() }}
