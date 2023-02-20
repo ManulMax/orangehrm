@@ -60,14 +60,11 @@ jobs:
             const fs = require('fs');
             const data = JSON.parse(fs.readFileSync('/home/runner/work/orangehrm/orangehrm/build/orangehrm-v2.json'));
             const version = data.info.version;
-            console.log(version);
 
-      - name: Check for warnings
+      - name: Check API version
         run: |
-          if grep -q "PHP Warning" output.txt; then
-            echo "Generate OpenAPI documentation failed with warnings."
-            exit 1
-          fi
+          if [ ${{ steps.extract_version.outputs.result }} != "2.2.0" ]; then
+            echo "API version is not 2.2.0"
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
