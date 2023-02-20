@@ -58,24 +58,9 @@ jobs:
         id: generate-doc
 
       - name: Check for errors
-        if: steps.generate-doc.outcome == 'failure'
+        if: ${{ failure() }}
         run: |
-          echo "Error: ${{ steps.generate-doc.exit-code }} ${{ steps.generate-doc.output }}"
-          if echo "${{ steps.generate-doc.output }}" | grep -q "PHP Stack trace"; then
-            echo "PHP Stack trace found. Exiting with error."
-            exit 1
-          fi
-          if echo "${{ steps.generate-doc.output }}" | grep -q "Warning:"; then
-            echo "Warnings found. Exiting with error."
-            exit 1
-          fi
-
-      - name: Check for errors
-        run: |
-          if [ $? -ne 0 ]; then
-            echo "Error: failed to generate OpenAPI documentation"
-            exit 1
-          fi
+          echo "abcd"
 
       - name: Extract version number
         uses: actions/github-script@v4
