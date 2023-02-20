@@ -56,13 +56,11 @@ jobs:
       - name: Generate OpenAPI documentation
         run: php devTools/core/console.php generate-open-api-doc
 
-      - name: Check for warnings
+      - name: Check for errors
         run: |
-          if grep -q "Warning" /tmp/generate-open-api-doc.log; then
-            echo "OpenAPI documentation generation produced warnings!"
+          if [ $? -ne 0 ]; then
+            echo "Error: failed to generate OpenAPI documentation"
             exit 1
-          else
-            echo "OpenAPI documentation generated successfully!"
           fi
 
       - name: Extract version number
