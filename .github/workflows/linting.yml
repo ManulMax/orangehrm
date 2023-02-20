@@ -50,6 +50,9 @@ jobs:
           git status
           git diff > ${{ github.sha }}.diff
 
+      - name: Generate OpenAPI documentation
+        run: php devTools/core/console.php generate-open-api-doc
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         if: ${{ failure() }}
