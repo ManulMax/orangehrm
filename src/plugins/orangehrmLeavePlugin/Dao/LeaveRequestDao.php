@@ -724,4 +724,70 @@ class LeaveRequestDao extends BaseDao
 
         return $q->getQuery()->execute();
     }
+
+    /**
+     * @param LeaveRequestSearchFilterParams $leaveSearchFilterParams
+     * @return Leave[]
+     */
+    public function getEmployeeLeaves(
+        LeaveRequestSearchFilterParams $leaveSearchFilterParams // TODO:: create new filter class
+    ): array {
+        $this->_markApprovedLeaveAsTaken();
+
+        // TODO:: move this logic to paginator
+        $q = $this->createQueryBuilder(Leave::class, 'leave')
+            ->leftJoin('leave.leaveType', 'leaveType')
+            ->leftJoin('leave.employee', 'employee')
+            ->select('leave', 'leaveType', 'employee');
+        $this->setSortingAndPaginationParams($q, $leaveSearchFilterParams);
+        $q->andWhere('leave.employee = :empNumber')
+            ->setParameter('empNumber', $leaveSearchFilterParams->getEmpNumber());
+
+        if ($leaveSearchFilterParams->getFromDate() !== null && $leaveSearchFilterParams->getToDate() !== null) {
+            $q->andWhere($q->expr()->between('leave.date', ':fromDate', ':toDate'))
+                ->setParameter('fromDate', $leaveSearchFilterParams->getFromDate())
+                ->setParameter('toDate', $leaveSearchFilterParams->getToDate());
+        } elseif ($leaveSearchFilterParams->getFromDate() !== null) {
+            $q->andWhere($q->expr()->gte('leave.date', ':fromDate'))
+                ->setParameter('fromDate', $leaveSearchFilterParams->getFromDate());
+        } elseif ($leaveSearchFilterParams->getToDate() !== null) {
+            $q->andWhere($q->expr()->lte('leave.date', ':toDate'))
+                ->setParameter('toDate', $leaveSearchFilterParams->getToDate());
+        }
+        // TODO:: move this logic to paginator up-to here
+
+        return $q->getQuery()->execute();
+    }
+
+    /**
+     * @param int $leaveRequestId
+     * @param string $fromDate
+     * @param string $toDate
+     *
+     * @return array
+     */
+    public function getLeavesFilterByDateRange(
+        int $leaveRequestId,
+        string $fromDate,
+        string $toDate
+    ): array {
+        $this->_markApprovedLeaveAsTaken();
+        $q = $this->createQueryBuilder(Leave::class, 'leave')
+            ->leftJoin('leave.employee', 'employee');
+
+        $q->andWhere('leave.leaveRequest = :leaveRequestId')
+            ->setParameter('leaveRequestId', $leaveRequestId);
+
+        $q->andWhere(
+            $q->expr()->between(
+                'leave.date',
+                ':fromDate',
+                ':toDate',
+            )
+        );
+        $q->setParameter('fromDate', $fromDate);
+        $q->setParameter('toDate', $toDate);
+
+        return $q->getQuery()->execute();
+    }
 }
