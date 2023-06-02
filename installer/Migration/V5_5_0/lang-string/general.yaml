@@ -1,0 +1,10 @@
+langStrings:
+  -
+    value: 'Today'
+    unitId: today
+  -
+    value: 'Clear'
+    unitId: clear
+  -
+    value: 'Close'
+    unitId: close
