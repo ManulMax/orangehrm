@@ -37,6 +37,7 @@
         :date-format="{{ dateFormat | json_encode() }}"
         help-url="{{ helpUrl }}"
     >
+      <on-demand></on-demand>
       <{{ componentName }}
       {% for prop in componentProps %}
         :{{ prop.getName() }}="{{ prop.getValue() }}"

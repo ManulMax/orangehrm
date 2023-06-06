@@ -1,0 +1,69 @@
+<!--
+/*
+ * This file is part of OrangeHRM Inc
+ *
+ * Copyright (C) 2020 onwards OrangeHRM Inc
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see  http://www.gnu.org/licenses
+ */
+-->
+
+<template>
+  <oxd-sheet :gutters="false" type="gray-lighten-2">
+    <div class="orangehrm-free-trial">
+      <div class="orangehrm-free-trial-logo">
+        <img
+          :src="freeTrialCompanyLogo"
+          class="orangehrm-free-trial-logo-img"
+          alt="company logo"
+        />
+      </div>
+      <div class="orangehrm-free-trial-remain-days">
+        <oxd-text
+          type="card-title"
+          class="orangehrm-free-trial-remain-days-title"
+        >
+          30 Days
+        </oxd-text>
+      </div>
+      <oxd-text>
+        left in your free-trial. To subscribe for free hosting
+      </oxd-text>
+      <div class="orangehrm-free-trial-subscribe">
+        <oxd-text type="card-title" class="orangehrm-free-trial-subscribe-link">
+          <a> click here </a>
+        </oxd-text>
+      </div>
+    </div>
+  </oxd-sheet>
+</template>
+
+<script>
+import {OxdSheet} from '@ohrm/oxd';
+
+export default {
+  name: 'RemainingDays',
+
+  components: {
+    'oxd-sheet': OxdSheet,
+  },
+
+  data() {
+    return {
+      freeTrialCompanyLogo: `${window.appGlobal.publicPath}/images/ohrm_logo.png`,
+    };
+  },
+};
+</script>
+<style src="./remain-days.scss" lang="scss" scoped></style>
