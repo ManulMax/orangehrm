@@ -42,7 +42,7 @@
       </oxd-text>
       <div class="orangehrm-free-trial-subscribe">
         <oxd-text type="card-title" class="orangehrm-free-trial-subscribe-link">
-          <a> click here </a>
+          <a @click="navigateSubscribePage"> click here </a>
         </oxd-text>
       </div>
     </div>
@@ -51,6 +51,7 @@
 
 <script>
 import {OxdSheet} from '@ohrm/oxd';
+import {navigate} from '@/core/util/helper/navigation';
 
 export default {
   name: 'RemainingDays',
@@ -63,6 +64,11 @@ export default {
     return {
       freeTrialCompanyLogo: `${window.appGlobal.publicPath}/images/ohrm_logo.png`,
     };
+  },
+  methods: {
+    navigateSubscribePage() {
+      navigate('/trial/subscribeFreeHosting');
+    },
   },
 };
 </script>
