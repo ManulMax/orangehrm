@@ -20,33 +20,38 @@
 -->
 
 <template>
-  <oxd-sheet :gutters="false" type="gray-lighten-2">
-    <div class="orangehrm-free-trial">
-      <div class="orangehrm-free-trial-logo">
-        <img
-          :src="freeTrialCompanyLogo"
-          class="orangehrm-free-trial-logo-img"
-          alt="company logo"
-        />
-      </div>
-      <div class="orangehrm-free-trial-remain-days">
-        <oxd-text
-          type="card-title"
-          class="orangehrm-free-trial-remain-days-title"
-        >
-          30 Days
+  <div v-if="isSubscribed">
+    <oxd-sheet :gutters="false" type="gray-lighten-2">
+      <div class="orangehrm-free-trial">
+        <div class="orangehrm-free-trial-logo">
+          <img
+            :src="freeTrialCompanyLogo"
+            class="orangehrm-free-trial-logo-img"
+            alt="company logo"
+          />
+        </div>
+        <div class="orangehrm-free-trial-remain-days">
+          <oxd-text
+            type="card-title"
+            class="orangehrm-free-trial-remain-days-title"
+          >
+            {{ remainingDays }}
+          </oxd-text>
+        </div>
+        <oxd-text>
+          left in your free-trial. To subscribe for free hosting
         </oxd-text>
+        <div class="orangehrm-free-trial-subscribe">
+          <oxd-text
+            type="card-title"
+            class="orangehrm-free-trial-subscribe-link"
+          >
+            <a @click="navigateSubscribePage"> click here </a>
+          </oxd-text>
+        </div>
       </div>
-      <oxd-text>
-        left in your free-trial. To subscribe for free hosting
-      </oxd-text>
-      <div class="orangehrm-free-trial-subscribe">
-        <oxd-text type="card-title" class="orangehrm-free-trial-subscribe-link">
-          <a @click="navigateSubscribePage"> click here </a>
-        </oxd-text>
-      </div>
-    </div>
-  </oxd-sheet>
+    </oxd-sheet>
+  </div>
 </template>
 
 <script>
@@ -59,7 +64,16 @@ export default {
   components: {
     'oxd-sheet': OxdSheet,
   },
-
+  props: {
+    remainingDays: {
+      type: String,
+      default: '0',
+    },
+    isSubscribed: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       freeTrialCompanyLogo: `${window.appGlobal.publicPath}/images/ohrm_logo.png`,
