@@ -2,7 +2,12 @@
 #        Screens
 ##########################
 
+free_trial_instance:
+  path: /trial/subscribeFreeHosting
+  controller: OrangeHRM\FreeTrial\Controller\FreeTrialController::handle
+  methods: [ GET ]
+
 free_trial_subscribe:
   path: /trial/subscribeFreeHosting
-  controller: OrangeHRM\FreeTrial\Controller\SubscribeFreeTrialController::handle
-  methods: [ GET ]
+  controller: OrangeHRM\FreeTrial\Controller\SubscribeFreeHostingController::handle
+  methods: [ POST ]

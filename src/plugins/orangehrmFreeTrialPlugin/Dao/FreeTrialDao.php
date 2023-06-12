@@ -19,9 +19,21 @@
 
 namespace OrangeHRM\FreeTrial\Dao;
 
+use OrangeHRM\Core\Traits\Service\ConfigServiceTrait;
+use OrangeHRM\Core\Traits\Service\DateTimeHelperTrait;
+use OrangeHRM\FreeTrial\Service\FreeTrialService;
+
 class FreeTrialDao
 {
+    use ConfigServiceTrait;
+    use DateTimeHelperTrait;
+
     public function saveSubscribeDate(): void
     {
+        $subscribedAt = $this->getDateTimeHelper()->getNow()->format('Y-m-d H:i:s');
+        $this->getConfigService()->getConfigDao()->setValue(
+            FreeTrialService::TRIAL_SUBSCRIBED_DATE_CONFIG,
+            $subscribedAt
+        );
     }
 }

@@ -14,23 +14,34 @@
  *
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA
+ * Boston, MA  02110-1301, USA
  */
 
-namespace OrangeHRM\FreeTrial\Controller;
+namespace OrangeHRM\FreeTrial\Service;
 
-use OrangeHRM\Core\Controller\AbstractVueController;
-use OrangeHRM\Core\Vue\Component;
-use OrangeHRM\Framework\Http\Request;
+use GuzzleHttp\Client;
 
-class SubscribeFreeTrialController extends AbstractVueController
+class ClientService
 {
-    /**
-     * @inheritDoc
-     */
-    public function preRender(Request $request): void
+    public const ON_DEMAND_ACCESS_TOKEN_CREATED_AT = 'ondemand_access_token_created_at';
+    public const ON_DEMAND_ACCESS_TOKEN = 'ondemand_access_token';
+
+    protected ?FreeTrialService $freeTrialService = null;
+
+    public function getFreeTrialService(): FreeTrialService
     {
-        $component = new Component('subscribe-free-hosting');
-        $this->setComponent($component);
+        if (!$this->freeTrialService instanceof FreeTrialService){
+            $this->freeTrialService = new FreeTrialService();
+        }
+        return $this->freeTrialService;
     }
+
+//    public function getNewAccessToken(): array
+//    {
+//        $client = new Client();
+//        $clientId = $this->getFreeTrialService()->getOnDemandClientId();
+//        $clientSecret = $this->getFreeTrialService()->getOnDemandClientSecret();
+//        $onDemandUrl = $this->getFreeTrialService()->getInstanceUrl();
+//
+//    }
 }

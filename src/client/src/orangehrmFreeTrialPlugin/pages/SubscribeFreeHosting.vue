@@ -29,53 +29,84 @@
       </div>
       <div>
         <oxd-divider />
-        <oxd-form>
+        <oxd-form
+          ref="subscribeForm"
+          method="post"
+          :action="submitUrl"
+          @submit-valid="onSubmit"
+        >
           <oxd-form-row>
             <oxd-grid :cols="1" class="orangehrm-full-width-grid">
               <oxd-grid-item>
-                <oxd-input-field label="System Url" disabled />
+                <oxd-input-field label="System Url" :value="url" disabled />
               </oxd-grid-item>
             </oxd-grid>
           </oxd-form-row>
           <oxd-form-row>
             <oxd-grid :cols="1" class="orangehrm-full-width-grid">
               <oxd-grid-item>
-                <oxd-input-field label="Company Name" />
+                <oxd-input-field
+                  v-model="subscribe.companyName"
+                  label="Company Name"
+                  name="companyName"
+                />
               </oxd-grid-item>
             </oxd-grid>
           </oxd-form-row>
           <oxd-form-row>
             <oxd-grid :cols="1" class="orangehrm-full-width-grid">
               <oxd-grid-item>
-                <oxd-input-field label="No. of Employees" />
+                <oxd-input-field
+                  v-model="subscribe.noOfEmployee"
+                  label="No. of Employees"
+                  name="noOfEmployee"
+                />
               </oxd-grid-item>
             </oxd-grid>
           </oxd-form-row>
           <oxd-form-row>
             <oxd-grid :cols="1" class="orangehrm-full-width-grid">
               <oxd-grid-item>
-                <oxd-input-field label="Country" />
+                <oxd-input-field
+                  v-model="subscribe.countryCode"
+                  type="select"
+                  :label="$t('general.country')"
+                  :options="countries"
+                  name="countryCode"
+                />
               </oxd-grid-item>
             </oxd-grid>
           </oxd-form-row>
           <oxd-form-row>
             <oxd-grid :cols="1" class="orangehrm-full-width-grid">
               <oxd-grid-item>
-                <oxd-input-field label="Contact Person Name" />
+                <oxd-input-field
+                  v-model="subscribe.contactPersonName"
+                  label="Contact Person Name"
+                  name="contactPersonName"
+                />
               </oxd-grid-item>
             </oxd-grid>
           </oxd-form-row>
           <oxd-form-row>
             <oxd-grid :cols="1" class="orangehrm-full-width-grid">
               <oxd-grid-item>
-                <oxd-input-field label="Contact Number" />
+                <oxd-input-field
+                  v-model="subscribe.contactNumber"
+                  label="Contact Number"
+                  name="contactNumber"
+                />
               </oxd-grid-item>
             </oxd-grid>
           </oxd-form-row>
           <oxd-form-row>
             <oxd-grid :cols="1" class="orangehrm-full-width-grid">
               <oxd-grid-item>
-                <oxd-input-field label="Email" />
+                <oxd-input-field
+                  v-model="subscribe.email"
+                  label="Email"
+                  name="email"
+                />
               </oxd-grid-item>
             </oxd-grid>
           </oxd-form-row>
@@ -97,8 +128,61 @@
 </template>
 
 <script>
+import {urlFor} from '@/core/util/helper/url';
+
 export default {
   name: 'SubscribeFreeHosting',
+
+  props: {
+    countries: {
+      type: Array,
+      default: () => [],
+    },
+    url: {
+      type: String,
+      required: true,
+    },
+    companyName: {
+      type: String,
+      required: true,
+    },
+    contactNumber: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    contactPersonName: {
+      type: String,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      subscribe: {
+        noOfEmployee: '',
+        companyName: '',
+        contactNumber: '',
+        email: '',
+        contactPersonName: '',
+        countryCode: [],
+      },
+    };
+  },
+
+  computed: {
+    submitUrl() {
+      return urlFor('/trial/subscribeFreeHosting');
+    },
+  },
+  methods: {
+    onSubmit() {
+      this.$refs.subscribeForm.$el.submit();
+    },
+  },
 };
 </script>
 
