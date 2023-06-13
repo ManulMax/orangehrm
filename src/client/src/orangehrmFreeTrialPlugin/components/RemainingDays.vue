@@ -20,7 +20,7 @@
 -->
 
 <template>
-  <div v-if="isSubscribed">
+  <div v-if="!isSubscribed">
     <oxd-sheet :gutters="false" type="gray-lighten-2">
       <div class="orangehrm-free-trial">
         <div class="orangehrm-free-trial-logo">

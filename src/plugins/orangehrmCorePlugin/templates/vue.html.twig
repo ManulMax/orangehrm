@@ -39,7 +39,7 @@
     >
       <on-demand
         remaining-days="{{ remainingDays }}"
-        is-subscribed="{{ subscribeStatus }}"
+        :is-subscribed="{{ subscribeStatus | json_encode() }}"
       ></on-demand>
       <{{ componentName }}
       {% for prop in componentProps %}
