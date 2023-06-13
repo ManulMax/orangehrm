@@ -64,6 +64,6 @@ export default {
     app.component('RequiredText', RequiredText);
     app.component('DateInput', DateInput);
     app.component('TimeInput', TimeInput);
-    app.component('OnDemand', RemainingDays);
+    app.component('OnDemand', RemainingDays); //related to on demand
   },
 };

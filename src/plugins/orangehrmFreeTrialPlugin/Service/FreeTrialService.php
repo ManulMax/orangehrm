@@ -20,7 +20,6 @@
 namespace OrangeHRM\FreeTrial\Service;
 
 use OrangeHRM\Core\Traits\Service\ConfigServiceTrait;
-use OrangeHRM\Core\Traits\Service\DateTimeHelperTrait;
 use OrangeHRM\FreeTrial\Dao\FreeTrialDao;
 
 class FreeTrialService

@@ -42,7 +42,7 @@ class FreeTrialController extends AbstractVueController
      */
     public function getFreeTrialService(): FreeTrialService
     {
-        if (!$this->freeTrialService instanceof FreeTrialService){
+        if (!$this->freeTrialService instanceof FreeTrialService) {
             $this->freeTrialService = new FreeTrialService();
         }
         return $this->freeTrialService;

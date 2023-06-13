@@ -17,31 +17,19 @@
  * Boston, MA  02110-1301, USA
  */
 
-namespace OrangeHRM\FreeTrial\Service;
+use Composer\Autoload\ClassLoader;
+use OrangeHRM\Framework\Http\Request;
+use OrangeHRM\Framework\PluginConfigurationInterface;
 
-use GuzzleHttp\Client;
-
-class ClientService
+class FreeTrialPluginConfiguration implements PluginConfigurationInterface
 {
-    public const ON_DEMAND_ACCESS_TOKEN_CREATED_AT = 'ondemand_access_token_created_at';
-    public const ON_DEMAND_ACCESS_TOKEN = 'ondemand_access_token';
-
-    protected ?FreeTrialService $freeTrialService = null;
-
-    public function getFreeTrialService(): FreeTrialService
+    /**
+     * @inheritDoc
+     */
+    public function initialize(Request $request): void
     {
-        if (!$this->freeTrialService instanceof FreeTrialService) {
-            $this->freeTrialService = new FreeTrialService();
-        }
-        return $this->freeTrialService;
+        $loader = new ClassLoader();
+        $loader->addPsr4('OrangeHRM\\FreeTrial\\', [realpath(__DIR__ . "/..")]);
+        $loader->register();
     }
-
-//    public function getNewAccessToken(): array
-//    {
-//        $client = new Client();
-//        $clientId = $this->getFreeTrialService()->getOnDemandClientId();
-//        $clientSecret = $this->getFreeTrialService()->getOnDemandClientSecret();
-//        $onDemandUrl = $this->getFreeTrialService()->getInstanceUrl();
-//
-//    }
 }

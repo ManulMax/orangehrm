@@ -19,12 +19,10 @@
 
 namespace OrangeHRM\FreeTrial\Controller;
 
-use OrangeHRM\Core\Api\V2\Exception\InvalidParamException;
 use OrangeHRM\Core\Api\V2\Validator\ParamRule;
 use OrangeHRM\Core\Api\V2\Validator\ParamRuleCollection;
 use OrangeHRM\Core\Api\V2\Validator\Rule;
 use OrangeHRM\Core\Api\V2\Validator\Rules;
-use OrangeHRM\Core\Api\V2\Validator\ValidatorException;
 use OrangeHRM\Core\Controller\AbstractController;
 use OrangeHRM\Core\Controller\PublicControllerInterface;
 use OrangeHRM\Core\Traits\ValidatorTrait;
@@ -84,7 +82,7 @@ class SubscribeFreeHostingController extends AbstractController implements Publi
     {
         return new ParamRuleCollection(
             new ParamRule(
-              self::PARAMETER_URL,
+                self::PARAMETER_URL,
                 new Rule(Rules::STRING_TYPE),
                 new Rule(Rules::NOT_BLANK),
             ),
