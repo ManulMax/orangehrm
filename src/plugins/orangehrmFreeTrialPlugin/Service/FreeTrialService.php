@@ -33,6 +33,8 @@ class FreeTrialService
     public const TRIAL_SUBSCRIBED_DATE_CONFIG = 'trial.subscribed_at';
     public const TRIAL_ON_DEMAND_CLIENT_ID_CONFIG = 'trial.ondemand_client_id';
     public const TRIAL_ON_DEMAND_CLIENT_SECRET_CONFIG = 'trial.ondemand_client_secret';
+    public const DEFAULT_CONTENT_TYPE = "application/json";
+    public const ENDPOINT_BASE_PATH = '/api/instance/v1/instance';
 
     /**
      * @var FreeTrialDao
@@ -40,11 +42,27 @@ class FreeTrialService
     private FreeTrialDao $freeTrialDao;
 
     /**
+     * @var ClientService|null
+     */
+    private ?ClientService $clientService = null;
+
+    /**
      * @return FreeTrialDao
      */
     public function getFreeTrialDao(): FreeTrialDao
     {
         return $this->freeTrialDao ??= new FreeTrialDao();
+    }
+
+    /**
+     * @return ClientService
+     */
+    public function getClientService(): ClientService
+    {
+        if (!$this->clientService instanceof ClientService) {
+            $this->clientService = new ClientService();
+        }
+        return $this->clientService;
     }
 
     /**
@@ -75,9 +93,9 @@ class FreeTrialService
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getInstanceName(): string
+    public function getInstanceName(): ?string
     {
         return $this->getConfigService()->getConfigDao()->getValue(self::INSTANCE_NAME_CONFIG);
     }
@@ -109,5 +127,34 @@ class FreeTrialService
     public function setSubscribed(): void
     {
         $this->getFreeTrialDao()->saveSubscribeDate();
+    }
+
+    /**
+     * @return array
+     */
+    public function getPreloadedValues(): array
+    {
+        $instanceName = $this->getInstanceName();
+        $token = $this->getClientService()->getAccessToken();
+        $headers = [
+            'Accept' => self::DEFAULT_CONTENT_TYPE,
+            'Content-Type' => self::DEFAULT_CONTENT_TYPE,
+            'Authorization' => 'Bearer ' . $token
+        ];
+
+        $response = $this->getClientService()->getApiClient()->post(
+            self::ENDPOINT_BASE_PATH . '/details?instanceName=' . $instanceName,
+            [
+                'headers' => $headers
+            ]
+        );
+
+        $body = json_decode($response->getBody(), true);
+        $responseCode = $response->getStatusCode();
+
+        return [
+            'responseCode' => $responseCode,
+            'response' => $body,
+        ];
     }
 }

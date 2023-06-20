@@ -47,6 +47,7 @@
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="subscribe.companyName"
+                  :value="companyName"
                   label="Company Name"
                   name="companyName"
                 />
@@ -58,6 +59,7 @@
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="subscribe.noOfEmployee"
+                  :value="noOfEmployees"
                   label="No. of Employees"
                   name="noOfEmployee"
                 />
@@ -69,6 +71,7 @@
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="subscribe.countryCode"
+                  :value="country"
                   type="select"
                   :label="$t('general.country')"
                   :options="countries"
@@ -82,6 +85,7 @@
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="subscribe.contactPersonName"
+                  :value="contactPersonName"
                   label="Contact Person Name"
                   name="contactPersonName"
                 />
@@ -93,6 +97,7 @@
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="subscribe.contactNumber"
+                  :value="contactNumber"
                   label="Contact Number"
                   name="contactNumber"
                 />
@@ -104,6 +109,7 @@
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="subscribe.email"
+                  :vlaue="email"
                   label="Email"
                   name="email"
                 />
@@ -157,6 +163,14 @@ export default {
     contactPersonName: {
       type: String,
       required: true,
+    },
+    country: {
+      type: String,
+      default: null,
+    },
+    noOfEmployees: {
+      type: Number,
+      default: 0,
     },
   },
 

@@ -54,15 +54,19 @@ class FreeTrialController extends AbstractVueController
     public function preRender(Request $request): void
     {
         $component = new Component('subscribe-free-hosting');
+        $preloadedValues = $this->getFreeTrialService()->getPreloadedValues();
+        $instanceDetails = $preloadedValues['response'];
 
         /** @var CountryService $countryService */
         $countryService = $this->getContainer()->get(Services::COUNTRY_SERVICE);
         $component->addProp(new Prop('countries', Prop::TYPE_ARRAY, $countryService->getCountryArray()));
         $component->addProp(new Prop('url', Prop::TYPE_STRING, $this->getFreeTrialService()->getInstanceUrl()));
-//        $component->addProp(new Prop('companyName'));
-//        $component->addProp(new Prop('contactNumber'));
-//        $component->addProp(new Prop('email'));
-//        $component->addProp(new Prop('contactPersonName'));
+        $component->addProp(new Prop('companyName', Prop::TYPE_STRING, $instanceDetails['companyName']));
+        $component->addProp(new Prop('contactNumber', Prop::TYPE_NUMBER, $instanceDetails['contactNumber']));
+        $component->addProp(new Prop('email', Prop::TYPE_STRING, $instanceDetails['email']));
+        $component->addProp(new Prop('contactPersonName', Prop::TYPE_STRING, $instanceDetails['contactPersonName']));
+        $component->addProp(new Prop('country', Prop::TYPE_STRING, $instanceDetails['country']));
+        $component->addProp(new  Prop('noOfEmployees', Prop::TYPE_NUMBER, $instanceDetails['noOfEmployees']));
 
         $this->setComponent($component);
     }
