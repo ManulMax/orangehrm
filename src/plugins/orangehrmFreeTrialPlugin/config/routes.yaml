@@ -1,13 +1,17 @@
 ##########################
+#     Public APIs
+##########################
+apiv2_free_trial_public_subscribe:
+  path: /api/v2/trial/subscribeFreeHosting
+  controller: OrangeHRM\Core\Controller\Rest\V2\GenericPublicRestController::handle
+  methods: [ POST ]
+  defaults:
+    _api: OrangeHRM\FreeTrial\PublicApi\SubscribeFreeTrialAPI
+
+##########################
 #        Screens
 ##########################
-
 free_trial_instance:
   path: /trial/subscribeFreeHosting
   controller: OrangeHRM\FreeTrial\Controller\FreeTrialController::handle
   methods: [ GET ]
-
-free_trial_subscribe:
-  path: /trial/subscribeFreeHosting
-  controller: OrangeHRM\FreeTrial\Controller\SubscribeFreeHostingController::handle
-  methods: [ POST ]

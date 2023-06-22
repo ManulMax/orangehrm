@@ -19,6 +19,7 @@
 
 namespace OrangeHRM\FreeTrial\Service;
 
+use OrangeHRM\Core\Api\V2\Exception\BadRequestException;
 use OrangeHRM\Core\Traits\Service\ConfigServiceTrait;
 use OrangeHRM\FreeTrial\Dao\FreeTrialDao;
 
@@ -75,11 +76,9 @@ class FreeTrialService
 
         $remainingDays =  $trialPeriod - (round((strtotime(date('Y-m-d H:i:s')) - strtotime($instanceCreatedDate)) / (86400)));
         if ($remainingDays == '1') {
-            return $remainingDays . ' Day left in your free-trial. ';
-        } elseif ($remainingDays <= '0') {
-            return 'Your Free-Trial expires Today!';
+            return $remainingDays . ' Day';
         } else {
-            return $remainingDays . ' Days left in your free-trial. ';
+            return $remainingDays . ' Days';
         }
     }
 
@@ -137,6 +136,7 @@ class FreeTrialService
     public function getPreloadedValues(): array
     {
         $instanceName = $this->getInstanceName();
+        $onDemandUrl = $this->getInstanceUrl();
         $token = $this->getClientService()->getAccessToken();
         $headers = [
             'Accept' => self::DEFAULT_CONTENT_TYPE,
@@ -144,8 +144,8 @@ class FreeTrialService
             'Authorization' => 'Bearer ' . $token
         ];
 
-        $response = $this->getClientService()->getApiClient()->post(
-            self::ENDPOINT_BASE_PATH . '/details?instanceName=' . $instanceName,
+        $response = $this->getClientService()->getApiClient()->get(
+            $onDemandUrl . 'index.php' . self::ENDPOINT_BASE_PATH . '/details?instanceName=' . $instanceName,
             [
                 'headers' => $headers
             ]
@@ -158,5 +158,44 @@ class FreeTrialService
             'responseCode' => $responseCode,
             'response' => $body,
         ];
+    }
+
+    /**
+     * @param array $queryParams
+     * @return array|null
+     */
+    public function saveSubscription(array $queryParams): ?array
+    {
+        $onDemandUrl = $this->getInstanceUrl();
+        $token = $this->getClientService()->getAccessToken();
+        $headers = array(
+            'Accept' => self::DEFAULT_CONTENT_TYPE,
+            'Content-Type' => self::DEFAULT_CONTENT_TYPE,
+            'Authorization' => 'Bearer ' . $token
+        );
+        $requestData = array(
+            'companyName' => $queryParams['companyName'],
+            'contactNumber' => $queryParams['contactNumber'],
+            'contactPersonName' => $queryParams['contactPersonName'],
+            'country' => $queryParams['country'],
+            'email' => $queryParams['email'],
+            'noOfEmployees' => $queryParams['noOfEmployees']
+        );
+        try {
+            $response = $this->getClientService()->getApiClient()->post(
+                $onDemandUrl . 'index.php' . self::ENDPOINT_BASE_PATH . '/subscribe',
+                array(
+                    'headers' => $headers,
+                    'body' => json_encode($requestData)
+                )
+            );
+            if ($response->getStatusCode() == 200) {
+                return json_decode($response->getBody(), true);
+            }
+        } catch (\Exception $e) {
+            throw new BadRequestException($e->getMessage());
+        }
+
+        return json_decode('');
     }
 }
