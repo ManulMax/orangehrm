@@ -75,9 +75,11 @@ class FreeTrialService
 
         $remainingDays =  $trialPeriod - (round((strtotime(date('Y-m-d H:i:s')) - strtotime($instanceCreatedDate)) / (86400)));
         if ($remainingDays == '1') {
-            return $remainingDays . ' Day';
+            return $remainingDays . ' Day left in your free-trial. ';
+        } elseif ($remainingDays <= '0') {
+            return 'Your Free-Trial expires Today!';
         } else {
-            return $remainingDays . ' Days';
+            return $remainingDays . ' Days left in your free-trial. ';
         }
     }
 

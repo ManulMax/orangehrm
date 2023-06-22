@@ -19,6 +19,12 @@
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
+  position: fixed;
+  top: 0;
+  z-index: 300;
+  width: 100%;
+  border-radius: 0;
+  background-color: #f1f2f5;
   &-logo-img {
     width: 25px;
     height: 25px;
@@ -30,6 +36,11 @@
     padding-left: 0.5rem;
   }
   ::v-deep(.orangehrm-free-trial-subscribe-link) {
+    cursor: pointer;
     color: var(--oxd-primary-one-color) !important;
   }
+}
+
+.orangehrm-free-trial-subscribe-link a {
+  cursor: pointer;
 }
