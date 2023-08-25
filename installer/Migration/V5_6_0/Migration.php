@@ -20,15 +20,23 @@
 namespace OrangeHRM\Installer\Migration\V5_6_0;
 
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use OrangeHRM\Installer\Migration\V5_5_0\LangStringHelper;
 use OrangeHRM\Installer\Util\V1\AbstractMigration;
 
 class Migration extends AbstractMigration
 {
+    protected ?LangStringHelper $langStringHelper = null;
+
     /**
      * @inheritDoc
      */
     public function up(): void
     {
+        $groups = ['admin'];
+        foreach ($groups as $group) {
+            $this->getLangStringHelper()->insertOrUpdateLangStrings($group);
+        }
+
         $this->getSchemaHelper()->dropForeignKeys('ohrm_i18n_translate', ['langStringId']);
         $foreignKeyConstraint = new ForeignKeyConstraint(
             ['lang_string_id'],
@@ -48,5 +56,15 @@ class Migration extends AbstractMigration
     public function getVersion(): string
     {
         return '5.6.0';
+    }
+
+    private function getLangStringHelper(): LangStringHelper
+    {
+        if (is_null($this->langStringHelper)) {
+            $this->langStringHelper = new LangStringHelper(
+                $this->getConnection()
+            );
+        }
+        return $this->langStringHelper;
     }
 }
