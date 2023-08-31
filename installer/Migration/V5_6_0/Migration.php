@@ -20,8 +20,8 @@
 namespace OrangeHRM\Installer\Migration\V5_6_0;
 
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
-use OrangeHRM\Installer\Migration\V5_5_0\LangStringHelper;
 use OrangeHRM\Installer\Util\V1\AbstractMigration;
+use OrangeHRM\Installer\Util\V1\LangStringHelper;
 
 class Migration extends AbstractMigration
 {
@@ -34,7 +34,7 @@ class Migration extends AbstractMigration
     {
         $groups = ['admin'];
         foreach ($groups as $group) {
-            $this->getLangStringHelper()->insertOrUpdateLangStrings($group);
+            $this->getLangStringHelper()->insertOrUpdateLangStrings(__DIR__, $group);
         }
 
         $this->getSchemaHelper()->dropForeignKeys('ohrm_i18n_translate', ['langStringId']);
