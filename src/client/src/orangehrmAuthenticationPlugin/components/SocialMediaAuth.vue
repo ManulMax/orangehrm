@@ -101,7 +101,7 @@ export default {
   max-width: 80%;
   &-header {
     text-align: center;
-    margin-bottom: 1.0rem;
+    margin-bottom: 1rem;
   }
 }
 </style>
