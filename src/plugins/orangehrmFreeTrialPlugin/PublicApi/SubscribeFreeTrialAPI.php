@@ -19,7 +19,6 @@
 
 namespace OrangeHRM\FreeTrial\PublicApi;
 
-use InvalidArgumentException;
 use OrangeHRM\Admin\Service\CountryService;
 use OrangeHRM\Core\Api\V2\CollectionEndpoint;
 use OrangeHRM\Core\Api\V2\Endpoint;
@@ -109,7 +108,7 @@ class SubscribeFreeTrialAPI extends Endpoint implements CollectionEndpoint
             'label' => $country->getCountryName()
         ];
 
-        $subscriberDetails = array(
+        $subscriberDetails = [
             'id' => $data['id'],
             'companyName' => $data['companyName'],
             'contactNumber' => $data['contactNumber'],
@@ -117,7 +116,7 @@ class SubscribeFreeTrialAPI extends Endpoint implements CollectionEndpoint
             'country' => $formattedCountry,
             'email' => $data['email'],
             'noOfEmployees' => $data['noOfEmployees'],
-        );
+        ];
 
         return new EndpointResourceResult(
             ArrayModel::class,
@@ -158,14 +157,14 @@ class SubscribeFreeTrialAPI extends Endpoint implements CollectionEndpoint
             self::PARAMETER_COUNTRY,
         );
 
-        return array(
+        return [
             'country' => $country,
             'companyName' => $companyName,
             'contactNumber' => $contactNumber,
             'email' => $email,
             'noOfEmployees' => $noOfEmployees,
             'contactPersonName' => $contactPerson,
-        );
+        ];
     }
 
     /**

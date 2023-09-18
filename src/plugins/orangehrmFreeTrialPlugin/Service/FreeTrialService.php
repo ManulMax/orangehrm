@@ -168,26 +168,26 @@ class FreeTrialService
     {
         $onDemandUrl = $this->getInstanceUrl();
         $token = $this->getClientService()->getAccessToken();
-        $headers = array(
+        $headers = [
             'Accept' => self::DEFAULT_CONTENT_TYPE,
             'Content-Type' => self::DEFAULT_CONTENT_TYPE,
             'Authorization' => 'Bearer ' . $token
-        );
-        $requestData = array(
+        ];
+        $requestData = [
             'companyName' => $queryParams['companyName'],
             'contactNumber' => $queryParams['contactNumber'],
             'contactPersonName' => $queryParams['contactPersonName'],
             'country' => $queryParams['country'],
             'email' => $queryParams['email'],
             'noOfEmployees' => $queryParams['noOfEmployees']
-        );
+        ];
         try {
             $response = $this->getClientService()->getApiClient()->post(
                 $onDemandUrl . 'index.php' . self::ENDPOINT_BASE_PATH . '/subscribe',
-                array(
+                [
                     'headers' => $headers,
                     'body' => json_encode($requestData)
-                )
+                ]
             );
             if ($response->getStatusCode() == 200) {
                 return json_decode($response->getBody(), true);
