@@ -24,7 +24,6 @@ use OrangeHRM\Core\Controller\AbstractVueController;
 use OrangeHRM\Core\Traits\ServiceContainerTrait;
 use OrangeHRM\Core\Vue\Component;
 use OrangeHRM\Core\Vue\Prop;
-use OrangeHRM\Entity\Country;
 use OrangeHRM\Framework\Http\Request;
 use OrangeHRM\Framework\Services;
 use OrangeHRM\FreeTrial\Service\FreeTrialService;
@@ -77,7 +76,7 @@ class FreeTrialController extends AbstractVueController
         $instanceDetails = $preloadedValues['response'];
         $countryName = $instanceDetails['country'];
         $formattedCountry = (object) [];
-        if ($countryName !== null){
+        if ($countryName !== null) {
             $country = $this->getCountryService()->getCountryByCountryName($countryName);
             $formattedCountry = [
                 'id' => $country->getCountryCode(),
