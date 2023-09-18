@@ -37,6 +37,10 @@
         :date-format="{{ dateFormat | json_encode() }}"
         help-url="{{ helpUrl }}"
     >
+      <on-demand
+              remaining-days="{{ remainingDays }}"
+              :is-subscribed="{{ subscribeStatus | json_encode() }}"
+      ></on-demand>
       <{{ componentName }}
       {% for prop in componentProps %}
         :{{ prop.getName() }}="{{ prop.getValue() }}"
