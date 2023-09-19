@@ -38,7 +38,9 @@
             {{ remainingDays }}
           </oxd-text>
         </div>
-        <oxd-text> To subscribe for free hosting </oxd-text>
+        <oxd-text>
+          left in your free-trial. To subscribe for free hosting
+        </oxd-text>
         <div class="orangehrm-free-trial-subscribe">
           <oxd-text
             type="card-title"

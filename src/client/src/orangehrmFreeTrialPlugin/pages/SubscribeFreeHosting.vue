@@ -29,12 +29,7 @@
       </div>
       <div>
         <oxd-divider />
-        <oxd-form
-          ref="subscribeForm"
-          method="post"
-          :action="submitUrl"
-          @submit-valid="onSubmit"
-        >
+        <oxd-form ref="subscribeForm" :loading="isLoading" method="post">
           <oxd-form-row>
             <oxd-grid :cols="1" class="orangehrm-full-width-grid">
               <oxd-grid-item>
@@ -47,7 +42,7 @@
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="subscribe.companyName"
-                  :value="companyName"
+                  :rules="rules.companyName"
                   label="Company Name"
                   name="companyName"
                 />
@@ -59,7 +54,7 @@
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="subscribe.noOfEmployee"
-                  :value="noOfEmployees"
+                  :rules="rules.noOfEmployee"
                   label="No. of Employees"
                   name="noOfEmployee"
                 />
@@ -71,7 +66,6 @@
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="subscribe.countryCode"
-                  :value="country"
                   type="select"
                   :label="$t('general.country')"
                   :options="countries"
@@ -85,7 +79,7 @@
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="subscribe.contactPersonName"
-                  :value="contactPersonName"
+                  :rules="rules.contactPersonName"
                   label="Contact Person Name"
                   name="contactPersonName"
                 />
@@ -97,7 +91,7 @@
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="subscribe.contactNumber"
-                  :value="contactNumber"
+                  :rules="rules.contactNumber"
                   label="Contact Number"
                   name="contactNumber"
                 />
@@ -109,9 +103,10 @@
               <oxd-grid-item>
                 <oxd-input-field
                   v-model="subscribe.email"
-                  :vlaue="email"
+                  :rules="rules.email"
                   label="Email"
                   name="email"
+                  :model-value="subscribe.email"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -134,16 +129,18 @@
 </template>
 
 <script>
-import {urlFor} from '@/core/util/helper/url';
-
+import {APIService} from '@ohrm/core/util/services/api.service';
+import {
+  shouldNotExceedCharLength,
+  validPhoneNumberFormat,
+  validEmailFormat,
+  required,
+  digitsOnly,
+} from '@ohrm/core/util/validation/rules';
+import {reloadPage} from '@/core/util/helper/navigation';
 export default {
   name: 'SubscribeFreeHosting',
-
   props: {
-    countries: {
-      type: Array,
-      default: () => [],
-    },
     url: {
       type: String,
       required: true,
@@ -169,32 +166,66 @@ export default {
       default: null,
     },
     noOfEmployees: {
-      type: Number,
-      default: 0,
+      type: String,
+      required: true,
     },
+    countries: {
+      type: Array,
+      default: () => [],
+    },
+  },
+
+  setup() {
+    const http = new APIService(
+      window.appGlobal.baseUrl,
+      `/api/v2/trial/subscribeFreeHosting`,
+    );
+    return {
+      http,
+    };
   },
 
   data() {
     return {
+      isLoading: false,
       subscribe: {
-        noOfEmployee: '',
-        companyName: '',
-        contactNumber: '',
-        email: '',
-        contactPersonName: '',
-        countryCode: [],
+        noOfEmployee: this.noOfEmployees,
+        companyName: this.companyName,
+        contactNumber: this.contactNumber,
+        email: this.email,
+        contactPersonName: this.contactPersonName,
+        countryCode: null,
+      },
+      rules: {
+        email: [required, shouldNotExceedCharLength(50), validEmailFormat],
+        contactPersonName: [required, shouldNotExceedCharLength(150)],
+        companyName: [required, shouldNotExceedCharLength(150)],
+        contactNumber: [shouldNotExceedCharLength(25), validPhoneNumberFormat],
+        noOfEmployee: [digitsOnly],
       },
     };
   },
-
-  computed: {
-    submitUrl() {
-      return urlFor('/trial/subscribeFreeHosting');
-    },
-  },
   methods: {
     onSubmit() {
-      this.$refs.subscribeForm.$el.submit();
+      this.isLoading = true;
+      this.http
+        .request({
+          method: 'POST',
+          data: {
+            ...this.subscribe,
+          },
+        })
+        .then(() => {
+          return this.$toast.addSuccess();
+        })
+        .then(() => {
+          this.isLoading = false;
+          reloadPage();
+        });
+    },
+
+    onCancel() {
+      reloadPage();
     },
   },
 };
