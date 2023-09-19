@@ -20,7 +20,14 @@
 -->
 
 <template>
-  <div class="orangehrm-background-container">
+  <div v-if="isSubscribed">
+    <oxd-alert
+      :show="true"
+      type="error"
+      message="You have already subscribed for free-hosting"
+    ></oxd-alert>
+  </div>
+  <div v-if="!isSubscribed" class="orangehrm-background-container">
     <div class="orangehrm-paper-container">
       <div class="orangehrm-header-container">
         <oxd-text tag="h6" class="orangehrm-main-title"
@@ -29,7 +36,11 @@
       </div>
       <div>
         <oxd-divider />
-        <oxd-form ref="subscribeForm" :loading="isLoading" method="post">
+        <oxd-form
+          ref="subscribeForm"
+          :loading="isLoading"
+          @submit-valid="onSubmit"
+        >
           <oxd-form-row>
             <oxd-grid :cols="1" class="orangehrm-full-width-grid">
               <oxd-grid-item>
@@ -44,7 +55,6 @@
                   v-model="subscribe.companyName"
                   :rules="rules.companyName"
                   label="Company Name"
-                  name="companyName"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -56,7 +66,6 @@
                   v-model="subscribe.noOfEmployee"
                   :rules="rules.noOfEmployee"
                   label="No. of Employees"
-                  name="noOfEmployee"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -65,11 +74,11 @@
             <oxd-grid :cols="1" class="orangehrm-full-width-grid">
               <oxd-grid-item>
                 <oxd-input-field
-                  v-model="subscribe.countryCode"
+                  v-model="subscribe.country"
                   type="select"
                   :label="$t('general.country')"
                   :options="countries"
-                  name="countryCode"
+                  :rules="rules.country"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -81,7 +90,6 @@
                   v-model="subscribe.contactPersonName"
                   :rules="rules.contactPersonName"
                   label="Contact Person Name"
-                  name="contactPersonName"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -93,7 +101,6 @@
                   v-model="subscribe.contactNumber"
                   :rules="rules.contactNumber"
                   label="Contact Number"
-                  name="contactNumber"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -105,8 +112,6 @@
                   v-model="subscribe.email"
                   :rules="rules.email"
                   label="Email"
-                  name="email"
-                  :model-value="subscribe.email"
                 />
               </oxd-grid-item>
             </oxd-grid>
@@ -136,10 +141,16 @@ import {
   validEmailFormat,
   required,
   digitsOnly,
+  maxCurrency,
 } from '@ohrm/core/util/validation/rules';
-import {reloadPage} from '@/core/util/helper/navigation';
+import {navigate, reloadPage} from '@/core/util/helper/navigation';
+import {OxdAlert} from '@ohrm/oxd';
+
 export default {
   name: 'SubscribeFreeHosting',
+  components: {
+    'oxd-alert': OxdAlert,
+  },
   props: {
     url: {
       type: String,
@@ -162,12 +173,12 @@ export default {
       required: true,
     },
     country: {
-      type: String,
+      type: Object,
       default: null,
     },
-    noOfEmployees: {
-      type: String,
-      required: true,
+    isSubscribed: {
+      type: Boolean,
+      default: false,
     },
     countries: {
       type: Array,
@@ -189,38 +200,67 @@ export default {
     return {
       isLoading: false,
       subscribe: {
-        noOfEmployee: this.noOfEmployees,
+        noOfEmployee: '',
         companyName: this.companyName,
         contactNumber: this.contactNumber,
         email: this.email,
         contactPersonName: this.contactPersonName,
-        countryCode: null,
+        country: this.country,
+        isSubscribed: this.isSubscribed,
       },
       rules: {
-        email: [required, shouldNotExceedCharLength(50), validEmailFormat],
+        email: [required, shouldNotExceedCharLength(320), validEmailFormat],
         contactPersonName: [required, shouldNotExceedCharLength(150)],
-        companyName: [required, shouldNotExceedCharLength(150)],
-        contactNumber: [shouldNotExceedCharLength(25), validPhoneNumberFormat],
-        noOfEmployee: [digitsOnly],
+        companyName: [required, shouldNotExceedCharLength(255)],
+        contactNumber: [
+          required,
+          shouldNotExceedCharLength(15),
+          validPhoneNumberFormat,
+        ],
+        noOfEmployee: [digitsOnly, maxCurrency(1000000000)],
+        country: [required],
       },
     };
   },
   methods: {
     onSubmit() {
+      if (this.subscribe.isSubscribed) {
+        navigate('/trial/subscribeFreeHosting');
+      }
       this.isLoading = true;
       this.http
         .request({
           method: 'POST',
           data: {
-            ...this.subscribe,
+            companyName: this.subscribe.companyName,
+            contactNumber: this.subscribe.contactNumber,
+            email: this.subscribe.email,
+            contactPersonName: this.subscribe.contactPersonName,
+            noOfEmployee: this.subscribe.noOfEmployee,
+            country: this.subscribe.country.label,
           },
         })
-        .then(() => {
-          return this.$toast.addSuccess();
+        .then((response) => {
+          if (response.status === 200) {
+            this.subscribe.companyName = response.data.data.companyName;
+            this.subscribe.contactNumber = response.data.data.contactNumber;
+            this.subscribe.contactPersonName =
+              response.data.data.contactPersonName;
+            this.subscribe.country = response.data.data.country;
+            this.subscribe.email = response.data.data.email;
+            this.subscribe.noOfEmployee = response.data.data.noOfEmployees;
+            this.subscribe.isSubscribed = true;
+            this.$toast.success({
+              title: this.$t('general.success'),
+              message: 'Successfully Subscribed',
+            });
+          } else if (response.status === 400) {
+            navigate('/trial/subscribeFreeHosting');
+          }
+          return this.$toast.saveSuccess();
         })
         .then(() => {
           this.isLoading = false;
-          reloadPage();
         });
     },
 

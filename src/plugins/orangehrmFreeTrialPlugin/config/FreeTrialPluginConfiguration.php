@@ -29,7 +29,7 @@ class FreeTrialPluginConfiguration implements PluginConfigurationInterface
     public function initialize(Request $request): void
     {
         $loader = new ClassLoader();
-        $loader->addPsr4('OrangeHRM\\FreeTrial\\', [realpath(__DIR__ . "/plugins/orangehrmFreeTrialPlugin")]);
+        $loader->addPsr4('OrangeHRM\\FreeTrial\\', [realpath(__DIR__ . "/..")]);
         $loader->register();
     }
 }
