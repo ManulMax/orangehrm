@@ -50,6 +50,21 @@
     <template v-slot:footer>{% include 'copyright.html.twig' %}<br></template>
     </oxd-layout>
   </div>
+  {% if subscribeStatus == false %}
+    <style>
+      .oxd-topbar {
+        margin-top: 2.5rem;
+      }
+
+      .oxd-sidepanel {
+        margin-top: 2.5rem;
+      }
+
+      .oxd-layout-context {
+        margin-top: 8rem;
+      }
+    </style>  
+  {% endif %}
 {% endblock %}
 
 {% block javascripts %}
