@@ -74,11 +74,15 @@ class FreeTrialController extends AbstractVueController
         $preloadedValues = $this->getFreeTrialService()->getPreloadedValues();
         $instanceUrl = $this->getFreeTrialService()->getInstanceUrl() . 'index.php';
         $instanceDetails = $preloadedValues['response'];
-        $country = $this->getCountryService()->getCountryByCountryName($instanceDetails['country']);
-        $formattedCountry = [
-            'id' => $country->getCountryCode(),
-            'label' => $country->getCountryName()
-        ];
+        $countryName = $instanceDetails['country'];
+        $formattedCountry = (object) [];
+        if ($countryName !== null){
+            $country = $this->getCountryService()->getCountryByCountryName($countryName);
+            $formattedCountry = [
+                'id' => $country->getCountryCode(),
+                'label' => $country->getCountryName()
+            ];
+        }
 
         /** @var CountryService $countryService */
         $countryService = $this->getContainer()->get(Services::COUNTRY_SERVICE);

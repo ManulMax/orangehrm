@@ -200,7 +200,7 @@ export default {
     return {
       isLoading: false,
       subscribe: {
-        noOfEmployee: '',
+        noOfEmployee: this.noOfEmployee,
         companyName: this.companyName,
         contactNumber: this.contactNumber,
         email: this.email,

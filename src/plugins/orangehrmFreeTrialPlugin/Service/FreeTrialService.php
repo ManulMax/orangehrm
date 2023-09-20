@@ -75,6 +75,10 @@ class FreeTrialService
         $instanceCreatedDate = $this->getConfigService()->getConfigDao()->getValue(self::TRIAL_CREATED_DATE_CONFIG);
 
         $remainingDays =  $trialPeriod - (round((strtotime(date('Y-m-d H:i:s')) - strtotime($instanceCreatedDate)) / (86400)));
+        if ($remainingDays < 0) {
+            $remainingDays = 0;
+        }
+        
         if ($remainingDays == '1') {
             return $remainingDays . ' Day';
         } else {
