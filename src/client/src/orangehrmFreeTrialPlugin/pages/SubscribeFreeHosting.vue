@@ -20,114 +20,114 @@
 -->
 
 <template>
-  <div v-if="isSubscribed">
+  <div>
     <oxd-alert
-      :show="true"
+      :show="isSubscribed"
       type="error"
       message="You have already subscribed for free-hosting"
     ></oxd-alert>
-  </div>
-  <div v-if="!isSubscribed" class="orangehrm-background-container">
-    <div class="orangehrm-paper-container">
-      <div class="orangehrm-header-container">
-        <oxd-text tag="h6" class="orangehrm-main-title"
-          >Subscribe For Free Hosting</oxd-text
-        >
-      </div>
-      <div>
-        <oxd-divider />
-        <oxd-form
-          ref="subscribeForm"
-          :loading="isLoading"
-          @submit-valid="onSubmit"
-        >
-          <oxd-form-row>
-            <oxd-grid :cols="1" class="orangehrm-full-width-grid">
-              <oxd-grid-item>
-                <oxd-input-field label="System Url" :value="url" disabled />
-              </oxd-grid-item>
-            </oxd-grid>
-          </oxd-form-row>
-          <oxd-form-row>
-            <oxd-grid :cols="1" class="orangehrm-full-width-grid">
-              <oxd-grid-item>
-                <oxd-input-field
-                  v-model="subscribe.companyName"
-                  :rules="rules.companyName"
-                  label="Company Name"
+    <div v-if="!isSubscribed" class="orangehrm-background-container">
+      <div class="orangehrm-paper-container">
+        <div class="orangehrm-header-container">
+          <oxd-text tag="h6" class="orangehrm-main-title"
+            >Subscribe For Free Hosting</oxd-text
+          >
+        </div>
+        <div>
+          <oxd-divider />
+          <oxd-form
+            ref="subscribeForm"
+            :loading="isLoading"
+            @submit-valid="onSubmit"
+          >
+            <oxd-form-row>
+              <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+                <oxd-grid-item>
+                  <oxd-input-field label="System Url" :value="url" disabled />
+                </oxd-grid-item>
+              </oxd-grid>
+            </oxd-form-row>
+            <oxd-form-row>
+              <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+                <oxd-grid-item>
+                  <oxd-input-field
+                    v-model="subscribe.companyName"
+                    :rules="rules.companyName"
+                    label="Company Name"
+                  />
+                </oxd-grid-item>
+              </oxd-grid>
+            </oxd-form-row>
+            <oxd-form-row>
+              <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+                <oxd-grid-item>
+                  <oxd-input-field
+                    v-model="subscribe.noOfEmployee"
+                    :rules="rules.noOfEmployee"
+                    label="No. of Employees"
+                  />
+                </oxd-grid-item>
+              </oxd-grid>
+            </oxd-form-row>
+            <oxd-form-row>
+              <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+                <oxd-grid-item>
+                  <oxd-input-field
+                    v-model="subscribe.country"
+                    type="select"
+                    :label="$t('general.country')"
+                    :options="countries"
+                    :rules="rules.country"
+                  />
+                </oxd-grid-item>
+              </oxd-grid>
+            </oxd-form-row>
+            <oxd-form-row>
+              <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+                <oxd-grid-item>
+                  <oxd-input-field
+                    v-model="subscribe.contactPersonName"
+                    :rules="rules.contactPersonName"
+                    label="Contact Person Name"
+                  />
+                </oxd-grid-item>
+              </oxd-grid>
+            </oxd-form-row>
+            <oxd-form-row>
+              <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+                <oxd-grid-item>
+                  <oxd-input-field
+                    v-model="subscribe.contactNumber"
+                    :rules="rules.contactNumber"
+                    label="Contact Number"
+                  />
+                </oxd-grid-item>
+              </oxd-grid>
+            </oxd-form-row>
+            <oxd-form-row>
+              <oxd-grid :cols="1" class="orangehrm-full-width-grid">
+                <oxd-grid-item>
+                  <oxd-input-field
+                    v-model="subscribe.email"
+                    :rules="rules.email"
+                    label="Email"
+                  />
+                </oxd-grid-item>
+              </oxd-grid>
+            </oxd-form-row>
+            <div class="orangehrm-action-button">
+              <oxd-form-actions>
+                <oxd-button
+                  type="button"
+                  display-type="ghost"
+                  label="Cancel"
+                  @click="onCancel"
                 />
-              </oxd-grid-item>
-            </oxd-grid>
-          </oxd-form-row>
-          <oxd-form-row>
-            <oxd-grid :cols="1" class="orangehrm-full-width-grid">
-              <oxd-grid-item>
-                <oxd-input-field
-                  v-model="subscribe.noOfEmployee"
-                  :rules="rules.noOfEmployee"
-                  label="No. of Employees"
-                />
-              </oxd-grid-item>
-            </oxd-grid>
-          </oxd-form-row>
-          <oxd-form-row>
-            <oxd-grid :cols="1" class="orangehrm-full-width-grid">
-              <oxd-grid-item>
-                <oxd-input-field
-                  v-model="subscribe.country"
-                  type="select"
-                  :label="$t('general.country')"
-                  :options="countries"
-                  :rules="rules.country"
-                />
-              </oxd-grid-item>
-            </oxd-grid>
-          </oxd-form-row>
-          <oxd-form-row>
-            <oxd-grid :cols="1" class="orangehrm-full-width-grid">
-              <oxd-grid-item>
-                <oxd-input-field
-                  v-model="subscribe.contactPersonName"
-                  :rules="rules.contactPersonName"
-                  label="Contact Person Name"
-                />
-              </oxd-grid-item>
-            </oxd-grid>
-          </oxd-form-row>
-          <oxd-form-row>
-            <oxd-grid :cols="1" class="orangehrm-full-width-grid">
-              <oxd-grid-item>
-                <oxd-input-field
-                  v-model="subscribe.contactNumber"
-                  :rules="rules.contactNumber"
-                  label="Contact Number"
-                />
-              </oxd-grid-item>
-            </oxd-grid>
-          </oxd-form-row>
-          <oxd-form-row>
-            <oxd-grid :cols="1" class="orangehrm-full-width-grid">
-              <oxd-grid-item>
-                <oxd-input-field
-                  v-model="subscribe.email"
-                  :rules="rules.email"
-                  label="Email"
-                />
-              </oxd-grid-item>
-            </oxd-grid>
-          </oxd-form-row>
-          <div class="orangehrm-action-button">
-            <oxd-form-actions>
-              <oxd-button
-                type="button"
-                display-type="ghost"
-                label="Cancel"
-                @click="onCancel"
-              />
-              <submit-button label="Submit" />
-            </oxd-form-actions>
-          </div>
-        </oxd-form>
+                <submit-button label="Submit" />
+              </oxd-form-actions>
+            </div>
+          </oxd-form>
+        </div>
       </div>
     </div>
   </div>
