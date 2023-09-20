@@ -78,7 +78,7 @@ class FreeTrialService
         if ($remainingDays < 0) {
             $remainingDays = 0;
         }
-        
+
         if ($remainingDays == '1') {
             return $remainingDays . ' Day';
         } else {

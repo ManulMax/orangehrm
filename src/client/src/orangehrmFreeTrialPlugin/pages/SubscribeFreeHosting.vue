@@ -184,6 +184,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    noOfEmployee: {
+      type: Number,
+      default: 0,
+    },
   },
 
   setup() {

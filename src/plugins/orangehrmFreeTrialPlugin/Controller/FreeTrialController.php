@@ -76,7 +76,7 @@ class FreeTrialController extends AbstractVueController
         $instanceDetails = $preloadedValues['response'];
         $countryName = $instanceDetails['country'];
         $formattedCountry = (object) [];
-        if ($countryName !== null){
+        if ($countryName !== null) {
             $country = $this->getCountryService()->getCountryByCountryName($countryName);
             $formattedCountry = [
                 'id' => $country->getCountryCode(),
