@@ -190,8 +190,7 @@ class SubscribeFreeTrialAPI extends Endpoint implements CollectionEndpoint
             ),
             new ParamRule(
                 self::PARAMETER_NO_OF_EMPLOYEES,
-                new Rule(Rules::STRING_TYPE),
-                new Rule(Rules::NOT_BLANK),
+                new Rule(Rules::INT_TYPE),
             ),
             new ParamRule(
                 self::PARAMETER_EMAIL,
