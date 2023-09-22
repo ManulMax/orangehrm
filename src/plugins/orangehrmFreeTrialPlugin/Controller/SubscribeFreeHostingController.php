@@ -103,7 +103,7 @@ class SubscribeFreeHostingController extends AbstractController implements Publi
             ),
             new ParamRule(
                 self::PARAMETER_NO_OF_EMPLOYEES,
-                new Rule(Rules::INT_TYPE),
+                new Rule(Rules::STRING_TYPE),
             ),
             new ParamRule(
                 self::PARAMETER_EMAIL,

@@ -142,7 +142,7 @@ class SubscribeFreeTrialAPI extends Endpoint implements CollectionEndpoint
             self::PARAMETER_CONTACT_PERSON,
         );
 
-        $noOfEmployees = $this->getRequestParams()->getString(
+        $noOfEmployees = $this->getRequestParams()->getInt(
             RequestParams::PARAM_TYPE_BODY,
             self::PARAMETER_NO_OF_EMPLOYEES,
         );

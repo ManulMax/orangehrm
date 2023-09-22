@@ -71,8 +71,10 @@ class FreeTrialController extends AbstractVueController
     public function preRender(Request $request): void
     {
         $component = new Component('subscribe-free-hosting');
+        $currentURL = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $instanceUrl = rtrim($currentURL, '/trial/subscribeFreeHosting');
+
         $preloadedValues = $this->getFreeTrialService()->getPreloadedValues();
-        $instanceUrl = $this->getFreeTrialService()->getInstanceUrl() . 'index.php';
         $instanceDetails = $preloadedValues['response'];
         $countryName = $instanceDetails['country'];
         $formattedCountry = (object) [];

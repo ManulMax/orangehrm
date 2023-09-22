@@ -64,6 +64,7 @@
                   <oxd-input-field
                     v-model="subscribe.noOfEmployee"
                     :rules="rules.noOfEmployee"
+                    placeholder="Employee Count"
                     label="No. of Employees"
                   />
                 </oxd-grid-item>
@@ -184,10 +185,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    noOfEmployee: {
-      type: Number,
-      default: 1,
-    },
   },
 
   setup() {
@@ -204,13 +201,13 @@ export default {
     return {
       isLoading: false,
       subscribe: {
-        noOfEmployee: this.noOfEmployee,
-        companyName: this.companyName,
-        contactNumber: this.contactNumber,
-        email: this.email,
-        contactPersonName: this.contactPersonName,
-        country: this.country,
-        isSubscribed: this.isSubscribed,
+        noOfEmployee: 1,
+        companyName: '',
+        contactNumber: '',
+        email: '',
+        contactPersonName: '',
+        country: null,
+        isSubscribed: false,
       },
       rules: {
         email: [required, shouldNotExceedCharLength(320), validEmailFormat],
@@ -226,11 +223,20 @@ export default {
       },
     };
   },
+  created() {
+    this.subscribe.companyName = this.companyName;
+    this.subscribe.contactNumber = this.contactNumber;
+    this.subscribe.email = this.email;
+    this.subscribe.contactPersonName = this.contactPersonName;
+    this.subscribe.country = this.country;
+    this.subscribe.isSubscribed = this.isSubscribed;
+  },
   methods: {
     onSubmit() {
       if (this.subscribe.isSubscribed) {
         navigate('/trial/subscribeFreeHosting');
       }
+      this.subscribe.noOfEmployee = parseInt(this.subscribe.noOfEmployee);
       this.isLoading = true;
       this.http
         .request({
@@ -258,6 +264,7 @@ export default {
               title: this.$t('general.success'),
               message: 'Successfully Subscribed',
             });
+            reloadPage();
           } else if (response.status === 400) {
             navigate('/trial/subscribeFreeHosting');
           }
