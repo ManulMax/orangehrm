@@ -264,7 +264,7 @@ export default {
               title: this.$t('general.success'),
               message: 'Successfully Subscribed',
             });
-            reloadPage();
+            navigate('/dashboard/index');
           } else if (response.status === 400) {
             navigate('/trial/subscribeFreeHosting');
           } else if (response.status === 422) {
