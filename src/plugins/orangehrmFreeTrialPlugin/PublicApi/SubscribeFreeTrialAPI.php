@@ -25,6 +25,7 @@ use OrangeHRM\Core\Api\V2\Endpoint;
 use OrangeHRM\Core\Api\V2\EndpointResourceResult;
 use OrangeHRM\Core\Api\V2\EndpointResult;
 use OrangeHRM\Core\Api\V2\Exception\BadRequestException;
+use OrangeHRM\Core\Api\V2\Exception\InvalidParamException;
 use OrangeHRM\Core\Api\V2\Model\ArrayModel;
 use OrangeHRM\Core\Api\V2\RequestParams;
 use OrangeHRM\Core\Api\V2\Validator\ParamRule;
@@ -93,6 +94,12 @@ class SubscribeFreeTrialAPI extends Endpoint implements CollectionEndpoint
     {
         if ($this->getFreeTrialService()->isSubscribed()) {
             throw new BadRequestException('This Instance have already subscribed.');
+        }
+
+        $employeeCount = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NO_OF_EMPLOYEES);
+
+        if ($employeeCount <= 0) {
+            throw new InvalidParamException([], 'Employee Count Should be more than 0');
         }
 
         $response = $this->freeTrialService->saveSubscription($this->getParametersArray());
