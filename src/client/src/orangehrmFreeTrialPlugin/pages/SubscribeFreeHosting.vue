@@ -268,7 +268,7 @@ export default {
           } else if (response.status === 400) {
             navigate('/trial/subscribeFreeHosting');
           } else if (response.status === 422) {
-            reloadPage();
+            navigate('/trial/subscribeFreeHosting');
           }
           return this.$toast.saveSuccess();
         })
