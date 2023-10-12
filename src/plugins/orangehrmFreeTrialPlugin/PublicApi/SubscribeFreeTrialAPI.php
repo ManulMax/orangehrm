@@ -96,12 +96,6 @@ class SubscribeFreeTrialAPI extends Endpoint implements CollectionEndpoint
             throw new BadRequestException('This Instance have already subscribed.');
         }
 
-        $employeeCount = $this->getRequestParams()->getInt(RequestParams::PARAM_TYPE_BODY, self::PARAMETER_NO_OF_EMPLOYEES);
-
-        if ($employeeCount <= 0) {
-            throw new InvalidParamException([], 'Employee Count Should be more than 0');
-        }
-
         $response = $this->freeTrialService->saveSubscription($this->getParametersArray());
         if ($response != null) {
             $this->freeTrialService->setSubscribed();

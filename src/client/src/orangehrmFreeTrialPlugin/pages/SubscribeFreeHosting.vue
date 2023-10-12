@@ -142,7 +142,8 @@ import {
   validEmailFormat,
   required,
   digitsOnly,
-  maxCurrency,
+  greaterThanOrEqual,
+  lessThanOrEqual,
 } from '@ohrm/core/util/validation/rules';
 import {navigate, reloadPage} from '@/core/util/helper/navigation';
 import {OxdAlert} from '@ohrm/oxd';
@@ -201,7 +202,7 @@ export default {
     return {
       isLoading: false,
       subscribe: {
-        noOfEmployee: 1,
+        noOfEmployee: null,
         companyName: '',
         contactNumber: '',
         email: '',
@@ -218,7 +219,14 @@ export default {
           shouldNotExceedCharLength(15),
           validPhoneNumberFormat,
         ],
-        noOfEmployee: [digitsOnly, maxCurrency(1000000000)],
+        noOfEmployee: [
+          digitsOnly,
+          greaterThanOrEqual(
+            1,
+            'value should be should be greater than or equal to 1',
+          ),
+          lessThanOrEqual(999999999, 'value should be less than 1000000000'),
+        ],
         country: [required],
       },
     };
@@ -236,7 +244,10 @@ export default {
       if (this.subscribe.isSubscribed) {
         navigate('/trial/subscribeFreeHosting');
       }
-      this.subscribe.noOfEmployee = parseInt(this.subscribe.noOfEmployee);
+      if (this.subscribe.noOfEmployee !== null) {
+        this.subscribe.noOfEmployee = parseInt(this.subscribe.noOfEmployee);
+      }
+
       this.isLoading = true;
       this.http
         .request({
@@ -267,8 +278,10 @@ export default {
             navigate('/dashboard/index');
           } else if (response.status === 400) {
             navigate('/trial/subscribeFreeHosting');
+            reloadPage();
           } else if (response.status === 422) {
             navigate('/trial/subscribeFreeHosting');
+            reloadPage();
           }
           return this.$toast.saveSuccess();
         })
