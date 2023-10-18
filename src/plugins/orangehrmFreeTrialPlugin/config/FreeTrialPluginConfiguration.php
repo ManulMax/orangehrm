@@ -1,4 +1,4 @@
-<!--
+<?php
 /**
  * OrangeHRM is a comprehensive Human Resource Management (HRM) System that captures
  * all the essential functionalities required for any enterprise.
@@ -16,40 +16,20 @@
  * if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301, USA
  */
- -->
 
-<template>
-  <oxd-input-field
-    type="select"
-    :label="$t('claim.event')"
-    :options="options"
-  />
-</template>
+use Composer\Autoload\ClassLoader;
+use OrangeHRM\Framework\Http\Request;
+use OrangeHRM\Framework\PluginConfigurationInterface;
 
-<script>
-import {ref, onBeforeMount} from 'vue';
-import {APIService} from '@ohrm/core/util/services/api.service';
-export default {
-  name: 'ClaimEventDropdown',
-  setup() {
-    const options = ref([]);
-    const http = new APIService(
-      window.appGlobal.baseUrl,
-      '/api/v2/claim/events',
-    );
-    onBeforeMount(() => {
-      http.getAll({limit: 0, status: true}).then(({data}) => {
-        options.value = data.data.map((item) => {
-          return {
-            id: item.id,
-            label: item.name,
-          };
-        });
-      });
-    });
-    return {
-      options,
-    };
-  },
-};
-</script>
+class FreeTrialPluginConfiguration implements PluginConfigurationInterface
+{
+    /**
+     * @inheritDoc
+     */
+    public function initialize(Request $request): void
+    {
+        $loader = new ClassLoader();
+        $loader->addPsr4('OrangeHRM\\FreeTrial\\', [realpath(__DIR__ . "/..")]);
+        $loader->register();
+    }
+}

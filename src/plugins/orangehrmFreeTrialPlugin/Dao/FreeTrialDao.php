@@ -1,4 +1,4 @@
-<!--
+<?php
 /**
  * OrangeHRM is a comprehensive Human Resource Management (HRM) System that captures
  * all the essential functionalities required for any enterprise.
@@ -16,40 +16,24 @@
  * if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301, USA
  */
- -->
 
-<template>
-  <oxd-input-field
-    type="select"
-    :label="$t('claim.event')"
-    :options="options"
-  />
-</template>
+namespace OrangeHRM\FreeTrial\Dao;
 
-<script>
-import {ref, onBeforeMount} from 'vue';
-import {APIService} from '@ohrm/core/util/services/api.service';
-export default {
-  name: 'ClaimEventDropdown',
-  setup() {
-    const options = ref([]);
-    const http = new APIService(
-      window.appGlobal.baseUrl,
-      '/api/v2/claim/events',
-    );
-    onBeforeMount(() => {
-      http.getAll({limit: 0, status: true}).then(({data}) => {
-        options.value = data.data.map((item) => {
-          return {
-            id: item.id,
-            label: item.name,
-          };
-        });
-      });
-    });
-    return {
-      options,
-    };
-  },
-};
-</script>
+use OrangeHRM\Core\Traits\Service\ConfigServiceTrait;
+use OrangeHRM\Core\Traits\Service\DateTimeHelperTrait;
+use OrangeHRM\FreeTrial\Service\FreeTrialService;
+
+class FreeTrialDao
+{
+    use ConfigServiceTrait;
+    use DateTimeHelperTrait;
+
+    public function saveSubscribeDate(): void
+    {
+        $subscribedAt = $this->getDateTimeHelper()->getNow()->format('Y-m-d H:i:s');
+        $this->getConfigService()->getConfigDao()->setValue(
+            FreeTrialService::TRIAL_SUBSCRIBED_DATE_CONFIG,
+            $subscribedAt
+        );
+    }
+}

@@ -40,6 +40,7 @@ import {
   OxdGridItem,
   OxdTableFilter,
 } from '@ohrm/oxd';
+import RemainingDays from '@/orangehrmFreeTrialPlugin/components/RemainingDays.vue';
 
 export default {
   install: (app: App) => {
@@ -63,5 +64,6 @@ export default {
     app.component('RequiredText', RequiredText);
     app.component('DateInput', DateInput);
     app.component('TimeInput', TimeInput);
+    app.component('OnDemand', RemainingDays); //related to on demand
   },
 };

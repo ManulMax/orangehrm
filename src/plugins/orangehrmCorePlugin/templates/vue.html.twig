@@ -22,6 +22,10 @@
   </noscript>
 
   <div id="app">
+    <on-demand
+        remaining-days="{{ remainingDays }}"
+        :is-subscribed="{{ subscribeStatus | json_encode() }}"
+    ></on-demand>
     <oxd-layout
         home-url="https://www.orangehrm.com/"
         :sidepanel-menu-items="{{ sidePanelMenuItems | json_encode() }}"
@@ -46,6 +50,21 @@
     <template v-slot:footer>{% include 'copyright.html.twig' %}<br></template>
     </oxd-layout>
   </div>
+  {% if subscribeStatus == false %}
+    <style>
+      .oxd-topbar {
+        margin-top: 2.8rem;
+      }
+
+      .oxd-sidepanel {
+        margin-top: 2.8rem;
+      }
+
+      .oxd-layout-context {
+        margin-top: 9rem;
+      }
+    </style>  
+  {% endif %}
 {% endblock %}
 
 {% block javascripts %}
