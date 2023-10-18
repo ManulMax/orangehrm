@@ -149,7 +149,7 @@ class FreeTrialService
         ];
 
         $response = $this->getClientService()->getApiClient()->get(
-            $onDemandUrl . 'index.php' . self::ENDPOINT_BASE_PATH . '/details?instanceName=' . $instanceName,
+            $onDemandUrl . self::ENDPOINT_BASE_PATH . '/details?instanceName=' . $instanceName,
             [
                 'headers' => $headers
             ]
@@ -187,7 +187,7 @@ class FreeTrialService
         ];
         try {
             $response = $this->getClientService()->getApiClient()->post(
-                $onDemandUrl . 'index.php' . self::ENDPOINT_BASE_PATH . '/subscribe',
+                $onDemandUrl . self::ENDPOINT_BASE_PATH . '/subscribe',
                 [
                     'headers' => $headers,
                     'body' => json_encode($requestData)

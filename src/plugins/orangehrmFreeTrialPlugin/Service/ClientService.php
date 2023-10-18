@@ -81,7 +81,7 @@ class ClientService
         $clientId = $this->getFreeTrialService()->getOnDemandClientId();
         $clientSecret = $this->getFreeTrialService()->getOnDemandClientSecret();
         $onDemandUrl = $this->getFreeTrialService()->getInstanceUrl();
-        $url = $onDemandUrl . 'index.php'. self::ENDPOINT_TOKEN;
+        $url = $onDemandUrl . self::ENDPOINT_TOKEN;
         $response = $client->post(
             $url,
             [
