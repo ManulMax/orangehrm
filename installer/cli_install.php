@@ -19,10 +19,12 @@
 
 use OrangeHRM\Authentication\Dto\UserCredential;
 use OrangeHRM\Config\Config;
+use OrangeHRM\Framework\Http\Request;
 use OrangeHRM\Framework\Http\Session\MemorySessionStorage;
 use OrangeHRM\Framework\Http\Session\Session;
 use OrangeHRM\Framework\ServiceContainer;
 use OrangeHRM\Framework\Services;
+use OrangeHRM\Installer\Controller\Installer\Api\InstallerDataRegistrationAPI;
 use OrangeHRM\Installer\Framework\HttpKernel;
 use OrangeHRM\Installer\Util\AppSetupUtility;
 use OrangeHRM\Installer\Util\StateContainer;
@@ -149,5 +151,9 @@ $appSetupUtility->writeConfFile();
 if ($enableDataEncryption) {
     $appSetupUtility->writeKeyFile();
 }
+
+$request = new Request();
+$request->setMethod(Request::METHOD_POST);
+(new InstallerDataRegistrationAPI())->handle($request);
 
 echo "Done\n";

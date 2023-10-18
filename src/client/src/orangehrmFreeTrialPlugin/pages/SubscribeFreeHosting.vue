@@ -54,6 +54,7 @@
                     v-model="subscribe.companyName"
                     :rules="rules.companyName"
                     label="Company Name"
+                    required
                   />
                 </oxd-grid-item>
               </oxd-grid>
@@ -66,6 +67,7 @@
                     :rules="rules.noOfEmployee"
                     placeholder="Employee Count"
                     label="No. of Employees"
+                    required
                   />
                 </oxd-grid-item>
               </oxd-grid>
@@ -90,6 +92,7 @@
                     v-model="subscribe.contactPersonName"
                     :rules="rules.contactPersonName"
                     label="Contact Person Name"
+                    required
                   />
                 </oxd-grid-item>
               </oxd-grid>
@@ -101,6 +104,7 @@
                     v-model="subscribe.contactNumber"
                     :rules="rules.contactNumber"
                     label="Contact Number"
+                    required
                   />
                 </oxd-grid-item>
               </oxd-grid>
@@ -112,12 +116,14 @@
                     v-model="subscribe.email"
                     :rules="rules.email"
                     label="Email"
+                    required
                   />
                 </oxd-grid-item>
               </oxd-grid>
             </oxd-form-row>
             <div class="orangehrm-action-button">
               <oxd-form-actions>
+                <required-text />
                 <oxd-button
                   type="button"
                   display-type="ghost"
@@ -141,7 +147,6 @@ import {
   validPhoneNumberFormat,
   validEmailFormat,
   required,
-  digitsOnly,
   greaterThanOrEqual,
   lessThanOrEqual,
 } from '@ohrm/core/util/validation/rules';
@@ -220,7 +225,7 @@ export default {
           validPhoneNumberFormat,
         ],
         noOfEmployee: [
-          digitsOnly,
+          required,
           greaterThanOrEqual(
             1,
             'value should be should be greater than or equal to 1',
@@ -278,18 +283,11 @@ export default {
             navigate('/dashboard/index');
           } else if (response.status === 400) {
             navigate('/trial/subscribeFreeHosting');
-            reloadPage();
           } else if (response.status === 422) {
             navigate('/trial/subscribeFreeHosting');
-            reloadPage();
           }
-          return this.$toast.saveSuccess();
-        })
-        .then(() => {
-          this.isLoading = false;
         });
     },
-
     onCancel() {
       reloadPage();
     },
