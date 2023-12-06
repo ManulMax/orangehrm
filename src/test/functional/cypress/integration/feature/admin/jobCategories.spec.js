@@ -64,6 +64,7 @@ describe('Admin - Job Category', function () {
       cy.getOXD('form').within(() => {
         cy.getOXDInput('Name')
           .type(this.strings.chars100.text)
+          .cy.wait(1000)
           .isInvalid('Should not exceed 50 characters');
         cy.getOXDInput('Name').setValue('').isInvalid('Required');
         cy.getOXDInput('Name')
