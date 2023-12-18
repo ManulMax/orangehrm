@@ -24,10 +24,6 @@ import {OxdText} from '@ohrm/oxd';
 export default {
   name: 'AuthButton',
   props: {
-    url: {
-      type: String,
-      required: true,
-    },
     color: {
       type: String,
       required: true,
@@ -42,7 +38,6 @@ export default {
       h(
         'a',
         {
-          href: props.url,
           title: props.label,
           class: 'orangehrm-auth-button',
         },
