@@ -140,7 +140,7 @@ class CorePluginConfiguration implements PluginConfigurationInterface, ConsoleCo
             'cookie_secure' => $isSecure,
             'cookie_httponly' => true,
             'cookie_path' => $path == '' ? '/' : $path,
-            'cookie_samesite' => 'Strict',
+            'cookie_samesite' => 'Lax',
         ];
         return new NativeSessionStorage(
             $options,
