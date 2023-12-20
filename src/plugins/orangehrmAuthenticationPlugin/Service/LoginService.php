@@ -23,6 +23,7 @@ use OrangeHRM\Admin\Traits\Service\UserServiceTrait;
 use OrangeHRM\Authentication\Dao\LoginLogDao;
 use OrangeHRM\Authentication\Dto\UserCredential;
 use OrangeHRM\Entity\LoginLog;
+use OrangeHRM\Entity\User;
 
 class LoginService
 {
@@ -53,6 +54,20 @@ class LoginService
         $user = $this->getUserService()
             ->geUserDao()
             ->getUserByUserName($credentials->getUsername());
+        $loginLog = new LoginLog();
+        $loginLog->setUserId($user->getId());
+        $loginLog->setUserName($user->getUserName());
+        $loginLog->setUserRoleName($user->getUserRole()->getName());
+        $loginLog->setUserRolePredefined($user->getUserRole()->isPredefined());
+        return $this->getLoginLogDao()->saveLoginLog($loginLog);
+    }
+
+    /**
+     * @param User $user
+     * @return LoginLog
+     */
+    public function addOIDCLogin(User $user): LoginLog
+    {
         $loginLog = new LoginLog();
         $loginLog->setUserId($user->getId());
         $loginLog->setUserName($user->getUserName());

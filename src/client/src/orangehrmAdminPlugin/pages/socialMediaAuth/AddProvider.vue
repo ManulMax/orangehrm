@@ -57,6 +57,7 @@
                 v-model="authProvider.clientSecret"
                 :rules="rules.clientSecret"
                 :label="$t('admin.client_secret')"
+                type="password"
                 required
               />
             </oxd-grid-item>
