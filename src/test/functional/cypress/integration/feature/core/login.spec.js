@@ -26,6 +26,7 @@ describe('Core - Login Page', function () {
 
   it('should login as admin', function () {
     cy.visit('/auth/login');
+    cy.wait(100);
     cy.getOXD('form').within(() => {
       cy.getOXDInput('Username').type(this.user.username);
       cy.getOXDInput('Password').type(this.user.password);
