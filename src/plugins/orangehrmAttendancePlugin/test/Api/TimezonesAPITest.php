@@ -41,6 +41,7 @@ class TimezonesAPITest extends EndpointIntegrationTestCase
     public function dataProviderForTestGetAll(): array
     {
         $phpVersion = phpversion();
+        dump($phpVersion);
         if ($phpVersion == '7.4.29') {
             return $this->getTestCases('TimezonesAPITestCasesForSpecificVersion.yaml', 'GetAll');
         } else {

@@ -1,5 +1,5 @@
 GetAll:
-  'Get Timezones by filter(ESS) - tok':
+  'Get Timezones by filter(ESS) - tok - updated':
     userId: 2
     now:
       datetime: '2022-03-01'
